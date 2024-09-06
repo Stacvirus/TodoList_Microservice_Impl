@@ -19,8 +19,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getOne(@PathVariable String id){
-        return ResponseEntity.ok(service.findOne(id));
+    public ResponseEntity<Boolean> getOne(@PathVariable String id){
+        boolean ans = false;
+        UserDto user = service.findOne(id);
+        if(user != null){
+            ans = true;
+        }
+        return ResponseEntity.ok(ans);
+
     }
 
     @PutMapping("/{id}")

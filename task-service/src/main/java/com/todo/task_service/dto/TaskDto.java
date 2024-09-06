@@ -14,6 +14,7 @@ import java.util.Date;
 @Builder
 public class TaskDto {
     private Long id;
+    private boolean userStatus;
 
     private String userId;
 

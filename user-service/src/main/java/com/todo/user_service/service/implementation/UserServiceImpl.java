@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     public UserDto findOne(String id) {
         return repository.findById(id)
                 .map(mapper::toDto)
-                .orElseThrow(() -> new UserNotFoundException("user with id: "+id+" not found"));
+                .orElse(null);
     }
 
     @Override

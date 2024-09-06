@@ -8,6 +8,7 @@ import com.todo.task_service.repository.TaskRepository;
 import com.todo.task_service.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +19,25 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository repository;
     private final TaskMapper mapper;
+    private final RestTemplate restTemplate;
 
     @Override
     public TaskDto create(TaskDto taskDto) {
-        return mapper.toDto(repository.save(mapper.toEntity(taskDto)));
+        System.out.println("===============>>>>>>>>>>>>><<in the create task implementation");
+        taskDto.setUserStatus(false);
+        // todo: check user existence from the user service
+        Boolean userExist = restTemplate.getForObject("http://localhost:3005/user-service/api/users/{userId}", Boolean.class, taskDto.getUserId());
+        System.out.println("response from user check: ==========>>>>>: "+userExist);
+        if (!userExist) {
+            return taskDto.builder()
+                    .title(null)
+                    .content(null)
+                    .dueDate(null)
+                    .build();
+        }
+        TaskDto response = mapper.toDto(repository.save(mapper.toEntity(taskDto)));
+        response.setUserStatus(true);
+        return response;
     }
 
     @Override
