@@ -8,6 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
+        <module name="history-service" />
+        <module name="clients" />
         <module name="message-queue" />
         <module name="eureka-server" />
       </profile>
@@ -33,7 +35,9 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
+      <module name="clients" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="history-service" options="-parameters" />
       <module name="message-queue" options="-parameters" />
       <module name="task-service" options="-parameters" />
       <module name="user-service" options="-parameters" />

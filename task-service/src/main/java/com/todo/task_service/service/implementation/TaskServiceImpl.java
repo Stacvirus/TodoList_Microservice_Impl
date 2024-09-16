@@ -1,5 +1,6 @@
 package com.todo.task_service.service.implementation;
 
+import com.stac.clients.checkUser.UserExists;
 import com.todo.task_service.dto.TaskDto;
 import com.todo.task_service.entity.Task;
 import com.todo.task_service.exception.TaskNotFoundException;
@@ -21,12 +22,17 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapper mapper;
     private final RestTemplate restTemplate;
 
+    private final UserExists userExists;
+
     @Override
     public TaskDto create(TaskDto taskDto) {
         System.out.println("===============>>>>>>>>>>>>><<in the create task implementation");
         taskDto.setUserStatus(false);
         // todo: check user existence from the user service
-        Boolean userExist = restTemplate.getForObject("http://localhost:3005/user-service/api/users/{userId}", Boolean.class, taskDto.getUserId());
+        //Boolean userExist = restTemplate.getForObject("http://localhost:3005/user-service/api/users/{userId}", Boolean.class, taskDto.getUserId());
+
+        // todo: user feign client for http requests
+        Boolean userExist = userExists.userExists(taskDto.getUserId());
         System.out.println("response from user check: ==========>>>>>: "+userExist);
         if (!userExist) {
             return taskDto.builder()
@@ -71,4 +77,6 @@ public class TaskServiceImpl implements TaskService {
             repository.deleteById(id);
         }
     }
+
+    // todo: save create and update actions in the history service using a message broker
 }
